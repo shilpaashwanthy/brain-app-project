@@ -1,27 +1,20 @@
 version: 0.2
 
 phases:
-install:
-runtime-versions:
-nodejs: 18
+  install:
+    commands:
+      - echo Installing dependencies
 
-pre_build:
-commands:
-- echo Logging into Amazon ECR
-- aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 327512371512.dkr.ecr.ap-south-1.amazonaws.com
-- aws eks update-kubeconfig --region ap-south-1 --name brain-cluster
+  pre_build:
+    commands:
+      - echo Logging into Amazon ECR
+      - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <account_id>.dkr.ecr.us-east-1.amazonaws.com
 
-build:
-commands:
-- echo Build started
-- docker build -t brain-tasks-app .
-- docker tag brain-tasks-app:latest 327512371512.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app:latest
+  build:
+    commands:
+      - echo Build started
+      - docker build -t brain-app .
 
-post_build:
-commands:
-- echo Pushing Docker image
-- docker push 327512371512.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app:latest
-- kubectl apply -f deployment.yaml
-- kubectl apply -f service.yaml
-
-# pipeline fix
+  post_build:
+    commands:
+      - echo Build completed
