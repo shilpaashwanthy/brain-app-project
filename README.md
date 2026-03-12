@@ -1,91 +1,163 @@
-DevOps Practice Project – Dist Directory
+Brain Tasks App – DevOps CI/CD Deployment
 
-This repository contains the production-ready build files (dist folder) for DevOps practice and deployment exercises.
+A complete DevOps CI/CD pipeline that automatically builds, containerizes, and deploys a web application to Kubernetes using AWS services.
 
-It is intentionally structured to help learners focus on CI/CD pipelines, hosting, containerization, and infrastructure setup rather than application development.
+This project demonstrates modern cloud-native deployment practices using Docker, Kubernetes, and AWS DevOps tools.
 
-📁 What This Repository Contains
+📌 Project Overview
 
-dist/ – Compiled and production-ready static files
+The pipeline automatically performs the following steps:
 
-HTML
+Source code pushed to GitHub
 
-CSS
+Pipeline triggered automatically
 
-JavaScript
+Application built using Docker
 
-Assets (images, fonts, etc.)
+Image pushed to container registry
 
-These files are ready to deploy to:
+Application deployed to Kubernetes cluster
 
-Web servers (Nginx / Apache)
+This provides a fully automated CI/CD workflow for application delivery.
 
-Cloud platforms (AWS S3, Azure Blob, GCP Storage)
+🏗️ Architecture Diagram
+             Developer
+                │
+                │ Push Code
+                ▼
+            GitHub Repo
+                │
+                │ Source Stage
+                ▼
+        AWS CodePipeline
+                │
+                ▼
+        AWS CodeBuild
+                │
+        Build Docker Image
+                │
+                ▼
+      Amazon ECR (Image Repo)
+                │
+                ▼
+     Amazon EKS (Kubernetes)
+                │
+                ▼
+           Kubernetes
+        Deployment + Service
+                │
+                ▼
+            Web Application
+⚙️ Tech Stack
+Technology	Purpose
+GitHub	Source code repository
+AWS CodePipeline	CI/CD pipeline orchestration
+AWS CodeBuild	Application build automation
+Docker	Containerization
+Amazon ECR	Container image registry
+Amazon EKS	Kubernetes cluster
+kubectl	Kubernetes deployment management
+📂 Project Structure
+brain-app-project
+│
+├── Dockerfile
+├── buildspec.yml
+├── deployment.yaml
+├── service.yaml
+├── dist/
+├── aws/
+└── README.md
+🚀 CI/CD Pipeline Workflow
+1️⃣ Source Stage
 
-Containerized environments (Docker + Nginx)
+Code is stored in GitHub
 
-Kubernetes clusters
+Pipeline automatically triggers on new commits
 
-CI/CD pipeline demonstrations
+2️⃣ Build Stage
 
-🎯 Purpose of This Repository
+AWS CodeBuild performs:
 
-This repository is designed for:
+Build Docker image
+Login to Amazon ECR
+Push image to ECR
+3️⃣ Deploy Stage
 
-DevOps beginners
+Application is deployed to Kubernetes using:
 
-CI/CD practice
+kubectl apply -f deployment.yaml
+kubectl apply -f service.yaml
+🐳 Docker Build
 
-Deployment pipeline testing
+Dockerfile builds the container image.
 
-Docker & Kubernetes deployment exercises
+Example:
 
-Web server configuration practice
+FROM node:18
+WORKDIR /app
+COPY . .
+RUN npm install
+EXPOSE 3000
+CMD ["npm", "start"]
+☸️ Kubernetes Deployment
 
-Reverse proxy and load balancer setup
+Deployment configuration:
 
-The goal is to simulate real-world deployment scenarios using already built application files.
+deployment.yaml
 
-❓ Why is there NO package.json?
+Creates pods running the application inside the Kubernetes cluster.
 
-You may notice that this repository does not include:
+Service configuration:
 
-package.json
+service.yaml
 
-node_modules
+Exposes the application to external users.
 
-Source code (src/)
+🔐 IAM Permissions Required
 
-Build tools configuration
+The CodeBuild role requires access to:
 
-✅ Reason:
+AmazonEC2ContainerRegistryFullAccess
+AmazonEKSClusterPolicy
+AmazonEKSWorkerNodePolicy
+📦 Buildspec File
 
-This repository only contains the final production build output (dist), not the development source code.
+The buildspec.yml file defines the build phases.
 
-In a typical project:
+Example pipeline tasks:
 
-Developers write source code.
+Install dependencies
+Login to ECR
+Build Docker image
+Push image to ECR
+Deploy to EKS
+🌐 Application Deployment
 
-The project is built using tools like:
+After successful pipeline execution:
 
-Node.js
+Docker image is pushed to ECR
 
-Webpack
+Kubernetes deployment updates automatically
 
-Vite
+Application becomes accessible via the Kubernetes service
 
-React (or other frameworks)
+📊 Key DevOps Concepts Demonstrated
 
-A dist/ folder is generated.
+✔ Continuous Integration
+✔ Continuous Deployment
+✔ Containerization
+✔ Kubernetes orchestration
+✔ Infrastructure automation
+✔ Cloud-native deployment
 
-Only the production build is deployed to servers.
+📈 Future Improvements
 
-This repository represents step 4 only.
+Possible enhancements:
 
-Since this is already the compiled output:
+Add monitoring with Prometheus & Grafana
 
-No dependencies are required
+Implement Helm charts
 
-No build process is required
+Add Terraform for infrastructure automation
 
-No package.json is needed
+Configure auto-scaling in EKS
