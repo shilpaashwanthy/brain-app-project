@@ -1,15 +1,11 @@
 version: 0.2
 
 phases:
-
-install:
-runtime-versions:
-nodejs: 18
-
 pre_build:
 commands:
-- echo Logging into ECR
+- echo Logging into Amazon ECR
 - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 327512371512.dkr.ecr.ap-south-1.amazonaws.com
+- aws eks update-kubeconfig --region ap-south-1 --name brain-cluster
 
 build:
 commands:
