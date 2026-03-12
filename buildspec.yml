@@ -1,6 +1,10 @@
 version: 0.2
 
 phases:
+install:
+runtime-versions:
+nodejs: 18
+
 pre_build:
 commands:
 - echo Logging into Amazon ECR
@@ -9,11 +13,13 @@ commands:
 
 build:
 commands:
+- echo Build started
 - docker build -t brain-tasks-app .
 - docker tag brain-tasks-app:latest 327512371512.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app:latest
 
 post_build:
 commands:
+- echo Pushing Docker image
 - docker push 327512371512.dkr.ecr.ap-south-1.amazonaws.com/brain-tasks-app:latest
 - kubectl apply -f deployment.yaml
 - kubectl apply -f service.yaml
